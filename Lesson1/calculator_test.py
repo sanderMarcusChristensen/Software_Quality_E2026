@@ -88,3 +88,13 @@ def test_subtract_black_box():
 
     # Assert
     assert result != -2
+
+# I need a main function to run the tests via run-button in vc-code 
+if __name__ == "__main__":
+    test_add()
+    test_subtract()
+    test_multiply()
+    test_divide()
+    test_add_black_box()
+    test_subtract_black_box()
+    print("All tests passed")
