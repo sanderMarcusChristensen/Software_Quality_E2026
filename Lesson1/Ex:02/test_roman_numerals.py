@@ -1,4 +1,4 @@
-import roman_numerals
+import roman_numerals as roman_numerals
 
 
 # Test single letters
