@@ -1,0 +1,47 @@
+Valid Partitions: 
+    0.1 - 300 kr  
+    300.01 - 800 kr 
+    800.01 - MAX
+
+Invalid Partition: 
+    MIN - (-0.01)   
+    0 - 0.09         
+    "abc"           
+
+
+3-value boundary value analysis - valid: 
+
+0.1 - 300: 
+    invalid : 0.09 / valid : 0.10, 0.11 
+    valid : 299.99, 300.00 / invalid : 300.01
+
+300.01 - 800
+    invalid : 300.00 / valid : 300.01, 300.02 
+    valid : 799.99, 800.00 / invalid : 800.01
+
+800.01 - MAX 
+    invalid : 800.00 / valid : 800.01, 800.02 
+    valid MAX - i pick 100000 -> 99999.99, 100000.00
+
+
+3-value boundary value analysis - invalid
+
+MIN - (-0.01):
+    invalid : -0.01, 0.00 / valid : 0.01
+
+0 - 0.09: 
+    invalid : -0.01, 0.00 / valid : 0.01 
+    invalid : 0.08, 0.09 / valid : 0.10 
+
+
+Test_case_list_negative : -0.01, 0.00
+
+Test_case_list_under_0.1 : 0.01, 0.05, 0.08, 0.09
+
+Test_case_list_between_0.1_and_300 : 0.10, 0.11, 150, 299.99, 300.00
+
+Test_case_list_between_300.01_and_800 : 300.01, 300.02, 550, 799.99, 800.00
+
+Test_case_list_between_800.01_and_MAX : 800.01, 800.02, 5000, 99999.99, 100000.00
+
+Test_case_list_non_numeric : "abc"
