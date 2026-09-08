@@ -8,21 +8,21 @@
 
 
 Valid Partitions: 
-    1 - 150   
+    0.1 - 150   
     151 - 300 
     301 - max  
 
 Test cases 
-    1 - 150 = 100 
+    0.1 - 150 = 100 
     151 - 300 = 250 
     300 - max = 450 
 
 Invalid Partition
-    0 
+    0
     -1 
     "abc"
     null 
-    150.99 ? 
+    
     
 
 
