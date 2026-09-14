@@ -1,0 +1,420 @@
+Test cases for the employees calsse 
+
+
+1. ----- CPR : ----------
+
+        - Partition:    
+            valid : 10 
+            invaild: 0-9 
+            invaild: 11-max 
+            individual "abc" 
+
+    boundary value analysis
+            9, 10, 11 
+        
+    Test case list:
+
+        "123456789"       → invalid, 9 characters
+        "1234567890"      → valid, 10 characters
+        "12345678901"     → invalid, 11 characters
+        "abcdefghij"      → invalid, letters
+        "12345abcde"      → invalid, numbers and letters
+        "12345-7890"      → invalid, special character
+
+
+
+2. ----- FristName : ----------
+
+  Partitions:
+
+    Valid:
+        1-30 characters
+        Alphabetic characters
+        Alphabetic characters and spaces
+        Alphabetic characters and dashes
+
+    Invalid:
+        0 characters
+        31 characters or more
+        Contains numbers
+        Contains special characters
+        Only spaces or dashes
+        Not a string
+
+Boundary value analysis – lower boundary:
+
+        0 characters → invalid
+        1 character  → valid
+        2 characters → valid
+
+Boundary value analysis – upper boundary:
+
+        29 characters → valid
+        30 characters → valid
+        31 characters → invalid
+
+Test case list:
+
+        ""                  → invalid, 0 characters
+        "A"                 → valid, 1 character
+        "AB"                → valid, 2 characters
+        "A" * 29            → valid, 29 characters
+        "A" * 30            → valid, 30 characters
+        "A" * 31            → invalid, 31 characters
+        "Anne Marie"        → valid, space
+        "Anne-Marie"        → valid, dash
+        "Søren"             → valid, Danish letter
+        "Sander123"         → invalid, numbers
+        "Sander!"           → invalid, special character
+        "   "               → invalid, only spaces
+        "---"               → invalid, only dashes
+        123                 → invalid, not a string
+        
+
+3. ----- Lastname : ----------
+
+    Partitions:
+
+    Valid:
+        1-30 characters
+        Alphabetic characters
+        Alphabetic characters and spaces
+        Alphabetic characters and dashes
+
+    Invalid:
+        0 characters
+        31 characters or more
+        Contains numbers
+        Contains special characters
+        Only spaces or dashes
+        Not a string
+
+Boundary value analysis – lower boundary:
+
+        0 characters → invalid
+        1 character  → valid
+        2 characters → valid
+
+Boundary value analysis – upper boundary:
+
+        29 characters → valid
+        30 characters → valid
+        31 characters → invalid
+
+Test case list:
+
+        ""                   → invalid
+        "A"                  → valid
+        "AB"                 → valid
+        "A" * 29             → valid
+        "A" * 30             → valid
+        "A" * 31             → invalid
+        "Jensen"             → valid
+        "Jensen Larsen"      → valid
+        "Jensen-Larsen"      → valid
+        "Jensen123"          → invalid
+        "Jensen!"            → invalid
+        123                  → invalid, not a string
+
+
+
+4. ----- Department : ----------
+
+Partitions:
+
+    Valid:
+        "HR"
+        "Finance"
+        "IT"
+        "Sales"
+        "General Services"
+
+    Invalid:
+        Any other department
+        Wrong use of uppercase/lowercase
+        Empty string
+        Not a string
+
+Boundary value analysis:
+
+        Not relevant because departments are categories,
+        not a numeric range.
+
+Test case list:
+
+        "HR"                → valid
+        "Finance"           → valid
+        "IT"                → valid
+        "Sales"             → valid
+        "General Services"  → valid
+        "Marketing"         → invalid
+        "it"                → invalid
+        ""                  → invalid
+        123                 → invalid
+
+
+
+5. ----- Base salary : ----------
+
+Partitions:
+
+    Valid:
+        20000-100000 DKK
+
+    Invalid:
+        Less than 20000 DKK
+        More than 100000 DKK
+        Non-numeric value
+
+Boundary value analysis – lower boundary:
+
+        19999.99 → invalid
+        20000.00 → valid
+        20000.01 → valid
+
+Boundary value analysis – upper boundary:
+
+        99999.99  → valid
+        100000.00 → valid
+        100000.01 → invalid
+
+Test case list:
+
+        19999.99   → invalid
+        20000.00   → valid
+        20000.01   → valid
+        50000.00   → valid, normal value
+        99999.99   → valid
+        100000.00  → valid
+        100000.01  → invalid
+        "35000"    → invalid, string
+        "abc"      → invalid, string
+        None       → invalid
+
+
+6. ----- Educational level : ----------
+
+Partitions:
+
+    Valid:
+        0 = none
+        1 = primary
+        2 = secondary
+        3 = tertiary
+
+    Invalid:
+        Less than 0
+        Greater than 3
+        Decimal numbers
+        String
+        Other non-integer values
+
+Boundary value analysis – lower boundary:
+
+        -1 → invalid
+         0 → valid
+         1 → valid
+
+Boundary value analysis – upper boundary:
+
+         2 → valid
+         3 → valid
+         4 → invalid
+
+Test case list:
+
+        -1      → invalid
+         0      → valid, getter returns "none"
+         1      → valid, getter returns "primary"
+         2      → valid, getter returns "secondary"
+         3      → valid, getter returns "tertiary"
+         4      → invalid
+         1.5    → invalid
+        "2"     → invalid
+        "abc"   → invalid
+
+
+7. ----- Country : ----------
+
+Partitions:
+
+    Valid:
+        Non-empty country name as a string
+        Country with spaces before or after the name
+
+    Invalid:
+        Empty string
+        Only spaces
+        Not a string
+
+Boundary value analysis:
+
+        Not relevant because the task does not specify
+        a minimum or maximum length.
+
+Test case list:
+
+        "Denmark"      → valid
+        "Norway"       → valid
+        "United States" → valid
+        " Denmark "    → valid and stored as "Denmark"
+        ""             → invalid
+        "   "          → invalid
+        123            → invalid
+        None           → invalid
+
+
+8. ----- getSalary : ----------
+
+    Formel: Actual salary = base salary + (educational level × 1220)
+
+Partitions:
+
+    Educational level 0:
+        No educational addition
+
+    Educational level 1:
+        Addition of 1220 DKK
+
+    Educational level 2:
+        Addition of 2440 DKK
+
+    Educational level 3:
+        Addition of 3660 DKK
+
+Test : 
+Base salary 20000, level 0:
+
+        20000 + (0 × 1220) = 20000
+
+Base salary 20000, level 1:
+
+        20000 + (1 × 1220) = 21220
+
+Base salary 20000, level 2:
+
+        20000 + (2 × 1220) = 22440
+
+Base salary 20000, level 3:
+
+        20000 + (3 × 1220) = 23660
+
+Base salary 50000, level 3:
+
+        50000 + (3 × 1220) = 53660
+
+Base salary 100000, level 3:
+
+        100000 + (3 × 1220) = 103660
+
+
+9. ----- getDiscount : ---------- 
+
+Formel : Discount = completed years of employment × 0.5
+
+Partitions:
+
+    Less than 1 completed year:
+        0% discount
+
+    Exactly 1 completed year:
+        0.5% discount
+
+    More than 1 completed year:
+        Number of completed years × 0.5
+
+
+Boundary value analysis
+    One day before completing 1 year → 0 years → 0%
+    Exactly 1 completed year         → 1 year  → 0.5%
+    One day after completing 1 year  → 1 year  → 0.5%
+
+Test: 
+
+    Date of employment = today
+    Expected discount = 0%
+
+    Date of employment = one day less than 1 full year ago
+    Expected discount = 0%
+
+    Date of employment = exactly 1 year ago
+    Expected discount = 0.5%
+
+    Date of employment = 1 year and 1 day ago
+    Expected discount = 0.5%
+
+    Date of employment = exactly 5 years ago
+    Expected discount = 2.5%
+
+    Date of employment = exactly 10 years ago
+    Expected discount = 5.0%
+
+
+10. ----- getShippingcosts : ----------   
+
+Partition 1 – no shipping costs:
+
+    Denmark → 0%
+    Norway  → 0%
+    Sweden  → 0%
+
+Partition 2 – half shipping costs:
+
+    Iceland → 50%
+    Finland → 50%
+
+Partition 3 – full shipping costs:
+
+    All other countries → 100%
+
+    "Denmark"  → 0
+    "Norway"   → 0
+    "Sweden"   → 0
+
+    "Iceland"  → 50
+    "Finland"  → 50
+
+    "Germany"       → 100
+    "France"        → 100
+    "United States" → 100
+
+
+11. ----- Getters / Setters  : ----------  
+Partitions:
+
+    Valid value:
+        Setter accepts the value
+        Getter returns the stored value
+
+    Invalid value:
+        Setter raises the expected exception
+        Invalid value is not stored
+
+    Test 
+    
+    set_cpr("1111111111")
+    get_cpr() returns "1111111111"
+
+    set_first_name("Anne-Marie")
+    get_first_name() returns "Anne-Marie"
+
+    set_last_name("Jensen Larsen")
+    get_last_name() returns "Jensen Larsen"
+
+    set_department("Finance")
+    get_department() returns "Finance"
+
+    set_base_salary(40000)
+    get_base_salary() returns 40000
+
+    set_educational_level(2)
+    get_educational_level() returns "secondary"
+
+    set_date_of_birth("01/01/1990")
+    get_date_of_birth() returns "01/01/1990"
+
+    set_date_of_employment("01/01/2020")
+    get_date_of_employment() returns "01/01/2020"
+
+    set_country("Sweden")
+    get_country() returns "Sweden"
