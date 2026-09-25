@@ -1,0 +1,120 @@
+
+Equivalence Partitions - Length: 
+    Valid partitions:
+        0.01 and above
+        positive whole numbers             -> 1
+        positive numbers with 1 decimal    -> 50.5
+        positive numbers with 2 decimals   -> 1000.25
+
+    Invalid partitions:
+        zero                                -> 0
+        negative numbers                    -> -1
+        more than 2 decimals                -> 1.234
+        non-numeric values                  -> "abc"
+
+
+BVA - Length: 
+    Partition: 0.01 
+
+        Lower boundary : 
+            Invalid : 0.00 
+            valid 0.01 / 0.02 
+
+
+Equivalence Partitions - Weight:
+    Valid partitions:
+        0.01 and above
+        positive whole numbers             -> 1
+        positive numbers with 1 decimal    -> 50.5
+        positive numbers with 2 decimals   -> 1000.25
+
+    Invalid partitions:
+        zero                                -> 0
+        negative numbers                    -> -1
+        more than 2 decimals                -> 1.234
+        non-numeric values                  -> "abc"
+
+
+BVA - Weight:
+    Partition: 0.01
+
+        Lower boundary:
+            Invalid: 0.00
+            valid: 0.01 / 0.02
+
+
+Equivalence Partitions - Temperature:
+    Valid measure partitions:
+        negative whole number               -> -10
+        zero                                -> 0
+        positive whole number               -> 25
+        number with 1 decimal               -> 25.5
+        number with 2 decimals              -> 25.55
+
+    Invalid measure partitions:
+        more than 2 decimals                -> 25.555
+        non-numeric value                   -> "abc"
+
+    Valid scale partitions:
+        starting scale                      -> "C" / "F" / "K"
+        destination scale                   -> "C" / "F" / "K"
+        six conversions                     -> C to F / C to K / F to C
+                                               F to K / K to C / K to F
+
+    Invalid scale partitions:
+        unknown scale                       -> "X"
+        empty scale                         -> ""
+        non-text scale                      -> 123
+
+    Same-scale requests (C to C, F to F, K to K):
+        not specified by the task; decide expected behavior before testing
+
+
+BVA - Temperature:
+    Decimal-place limit:
+        valid: 25.5 / 25.55
+        invalid: 25.555
+
+
+Test cases - Length:
+    Each case is (measure, system).
+
+    valid_list (happy path):
+        (0.01, "Metric"), (0.02, "Metric"), (1, "Metric"),
+        (50.5, "Metric"), (1000.25, "Metric"),
+        (0.01, "Imperial"), (1, "Imperial"), (2.54, "Imperial")
+
+    invalid_list (expect an error):
+        (0, "Metric"), (-0.01, "Metric"), (-1, "Imperial"),
+        (1.234, "Metric"), ("abc", "Metric"),
+        (1, "Unknown"), (1, ""), (1, 123)
+
+
+Test cases - Weight:
+    Each case is (measure, system).
+
+    valid_list (happy path):
+        (0.01, "Metric"), (0.02, "Metric"), (1, "Metric"),
+        (50.5, "Metric"), (1000.25, "Metric"),
+        (0.01, "Imperial"), (1, "Imperial"), (2.5, "Imperial")
+
+    invalid_list (expect an error):
+        (0, "Metric"), (-0.01, "Metric"), (-1, "Imperial"),
+        (1.234, "Metric"), ("abc", "Metric"),
+        (1, "Unknown"), (1, ""), (1, 123)
+
+
+Test cases - Temperature:
+    Each case is (measure, starting scale, destination scale).
+
+    valid_list (happy path):
+        (-10, "C", "F"), (25.55, "C", "K"),
+        (32, "F", "C"), (25.5, "F", "K"),
+        (273.15, "K", "C"), (0, "K", "F")
+
+    invalid_list (expect an error):
+        (25.555, "C", "F"), ("abc", "C", "F"),
+        (25, "X", "F"), (25, "", "F"), (25, 123, "F"),
+        (25, "C", "X"), (25, "C", ""), (25, "C", 123)
+
+    Same-scale requests are left out until we decide their expected result.

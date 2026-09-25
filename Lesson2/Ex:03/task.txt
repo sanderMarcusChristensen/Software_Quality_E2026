@@ -22,6 +22,8 @@ Corresponding equivalence partitions:
         non-numeric values    -> "abc"
 
 
+BVA: 
+
     valid partitions: 
         invalid lower boundary: 4
         valid lower boundary: 5, 6 
