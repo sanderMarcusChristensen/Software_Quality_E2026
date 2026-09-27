@@ -1,0 +1,102 @@
+Testplan - Grade, trin 1: Unit testing med stub og black-box
+
+    Formål:
+        Test convert(grade, country) med faste svar fra en stub.
+        Vores database er SQLite. Stub-testene bruger ingen rigtig database.
+        AAA og pytest.mark.parametrize bruges, når vi skriver testene.
+
+    Aftalt mapping i projektet:
+        DK "00" <-> US "F"
+        DK "02" <-> US "D"
+        DK "04" <-> US "C+"
+        DK "07" <-> US "B"
+        DK "10" <-> US "A"
+        DK "12" <-> US "A+"
+
+    Inputformat i denne plan:
+        grade er tekst, så "00" og "02" beholder deres nuller.
+        country er landet for den karakter, vi giver som input.
+        Eksempel: ("12", "Denmark") -> "A+"
+        Eksempel: ("A", "USA") -> "10"
+
+    Afklaring:
+        -3 er en dansk karakter, men har ingen mapping i vores projekttabel.
+        Den regnes derfor som ikke understøttet i denne plan.
+        "C" har heller ingen mapping; vores tabel bruger "C+".
+        Accept af tal som 4, tekst som "4", små bogstaver og ekstra mellemrum
+        er ikke fastlagt. De skal ikke automatisk markeres som ugyldige.
+
+
+Equivalence Partitions - Grade:
+    Valid partitions:
+        understøttet dansk karakter         -> ("04", "Denmark") -> "C+"
+        understøttet amerikansk karakter    -> ("B", "USA") -> "07"
+
+        Alle gyldige DK-værdier: "00", "02", "04", "07", "10", "12"
+        Alle gyldige US-værdier: "F", "D", "C+", "B", "A", "A+"
+        Vi tester alle par i begge retninger, da tabellen er lille.
+
+    Invalid partitions - karakter:
+        tal uden for projektskalaen         -> ("-5", "Denmark"), ("13", "Denmark")
+        tal mellem understøttede karakterer -> ("03", "Denmark")
+        karakter uden mapping              -> ("-3", "Denmark"), ("C", "USA")
+        ukendt tekst                       -> ("ABC", "Denmark"), ("Z", "USA")
+        tom tekst                          -> ("", "Denmark")
+        manglende værdi                     -> (None, "Denmark")
+        forkert datatype                   -> ([], "Denmark"), (True, "Denmark")
+        karakter fra det andet system      -> ("A", "Denmark"), ("12", "USA")
+
+    Invalid partitions - country:
+        ukendt land                        -> ("12", "Sweden")
+        tom tekst                          -> ("12", "")
+        manglende værdi                     -> ("12", None)
+        forkert datatype                   -> ("12", 123)
+
+    Forventning til invalid partitions:
+        Et ugyldigt input eller et opslag uden resultat skal give en fejl.
+        Det må ikke returnere en tilfældig karakter.
+
+
+BVA - Grade:
+    Karakterer er enkelte tilladte værdier, ikke et sammenhængende interval.
+    Derfor er alle tal mellem 0 og 12 ikke gyldige.
+    Naboværdierne nedenfor bruges til at kontrollere netop dette.
+    country er "Denmark" i disse cases.
+
+    Laveste understøttede DK-karakter: "00"
+        invalid: "-1"
+        valid:   "00" -> "F"
+        invalid: "01"
+
+    Laveste beståede DK-karakter: "02"
+        invalid: "01"
+        valid:   "02" -> "D"
+        invalid: "03"
+
+    Højeste understøttede DK-karakter: "12"
+        invalid: "11"
+        valid:   "12" -> "A+"
+        invalid: "13"
+
+    Overgang mellem ikke-bestået og bestået:
+        valid input: "00" -> "F"
+        valid input: "02" -> "D"
+        "00" er en ikke-bestået karakter, men gyldigt input til convert().
+        convert() oversætter karakteren; den beregner ikke bestået/ikke-bestået.
+
+    Amerikanske karakterer:
+        Der er ingen numerisk afstand som +1 eller -1 mellem bogstaverne.
+        Test alle seks tilladte karakterer og en ukendt karakter som "Z".
+        Brug ikke alfabetets rækkefølge som BVA.
+
+
+Stub-svar til de senere unit tests:
+    Opslag finder en karakter              -> en række, fx ("A+",)
+        Forventet returværdi fra convert() -> "A+"
+
+    Opslag finder ingen karakter           -> None
+        Forventet resultat                 -> en fejl
+
+    Stubben skal returnere det planlagte svar for den konkrete test.
+    Den skal ikke selv indeholde en ny implementering af konverteringen.
+    Om SQL-opslaget og de rigtige tabeldata virker, testes senere mod SQLite.
